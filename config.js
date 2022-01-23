@@ -1,3 +1,9 @@
+export const bot = {
+	token: '',
+	channel: '',
+	webhook: ''
+}
+
 export const messages = {
 	hello: "Здравствуйте, %NAME%!",
 	helloDescription: "Вас рада приветствовать служба поддержки Vare!\nВ скором времени Вам будет назначен агент поддержки, который постарается решить ваш вопрос!",

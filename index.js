@@ -1,18 +1,27 @@
-if (!process.env.WEBHOOK || !process.env.TOKEN || !process.env.CHANNEL) {console.log("Ошибка окружения!");process.exit();}
+import { messages, clientOptions, bot } from './config.js';
+import chalk from 'chalk';
 
+if (!bot.token || !bot.webhook || !bot.channel) {
+	console.log(chalk.bgRed('====================='));
+	console.log(chalk.red("Ошибка окружения!"));
+	if(!bot.token) console.log(chalk.yellow('Не указан токен бота!'));
+	if(!bot.webhook) console.log(chalk.yellow('Не указана ссылка вебхука!'));
+	if(!bot.channel) console.log(chalk.yellow('Не указан ID канала для оповещения о новых тикетах!'));
+	console.log(chalk.bgRed('====================='));
+	process.exit();
+}
 import discord from 'discord.js';
-import { messages, clientOptions } from './config';
-import $resolveInteractionButtonsClose from './resolvers/interactions/buttons/close';
-import $resolveInteractionButtonsGet from './resolvers/interactions/buttons/get';
-import $resolveInteractionSelectmenu from './resolvers/interactions/selectMenu';
-import $resolveMessage from './resolvers/messageResolver';
-import $threadDelete from './resolvers/threadDelete';
+import $resolveInteractionButtonsClose from './resolvers/interactions/buttons/close.mjs';
+import $resolveInteractionButtonsGet from './resolvers/interactions/buttons/get.mjs';
+import $resolveInteractionSelectmenu from './resolvers/interactions/selectMenu.mjs';
+import $resolveMessage from './resolvers/messageResolver.mjs';
+import $threadDelete from './resolvers/threadDelete.mjs';
 
 const client  = new discord.Client(clientOptions);
 
 client.userLib = {
 	config : messages,
-	webHook: new discord.WebhookClient({url: process.env.WEBHOOK}),
+	webHook: new discord.WebhookClient({url: bot.webhook}),
 	tickets: new Map(),
 	threads: new Map(),
 	channel: {},
@@ -51,11 +60,11 @@ client.on("interactionCreate", async inter => {
 client.on("ready", async () => {
 	console.log(client.userLib.getTime() + `Авторизация выполнена!`);
 	client.user.setActivity('Напиши в ЛС для помощи!', { type: 'WATCHING' });
-	client.userLib.channel = await client.channels.fetch(process.env.CHANNEL);
+	client.userLib.channel = await client.channels.fetch(bot.channel);
 	console.log(client.userLib.getTime() + `Лог канал закеширован! #${client.userLib.channel.name}`);
 	console.log(client.userLib.getTime() + "К работе готов!\n");
 });
 
-client.login(process.env.TOKEN).then(() => {
+client.login(bot.token).then(() => {
 	console.log(client.userLib.getTime() + "Авторизация...")
 });

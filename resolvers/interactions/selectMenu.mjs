@@ -1,4 +1,4 @@
-import { repliesMessages } from "../../config";
+import { repliesMessages } from "../../config.js";
 
 export default async function(client, inter) {
 	let message = await client.userLib.webHook.send({

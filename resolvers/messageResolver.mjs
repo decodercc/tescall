@@ -1,5 +1,5 @@
-import $resolveMessagesDirect from "./messages/directMessage";
-import $resolveMessagesThread from "./messages/thread";
+import $resolveMessagesDirect from "./messages/directMessage.mjs";
+import $resolveMessagesThread from "./messages/thread.mjs";
 import {MessageEmbed} from "discord.js";
 import {colors} from "../config.js";
 
